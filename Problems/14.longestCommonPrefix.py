@@ -11,9 +11,7 @@ class Solution(object):
             return ''
         
         prefix = ''
-
-        i = 0
-
+        
         for i in range(max(len(s) for s in strs)):
             try:
                 if len(set(s[i] for s in strs)) == 1:
