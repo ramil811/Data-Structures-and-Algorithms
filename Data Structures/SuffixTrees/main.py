@@ -4,6 +4,7 @@ class SuffixTreeNode(object):
         self.end = end
         self.edges = {}
         self.suffix_link = None
+        print(self)
 
     def __repr__(self):
         return "SuffixTreeNode(%s, %s)" % (self.start, self.end)
@@ -37,10 +38,11 @@ class SuffixTree(object):
     def build(self):
         # loop through the string and add each suffix to the tree
         for i in range(len(self.string)):
-            print(f"-------- Adding suffix {self.string[:i+1]} -------- ")
+            print(f"-------- Adding suffix {self.string[i]} -------- ")
             self.add_to_tree(i)
+            print(f"-------- After adding suffix {self.string[i]} -------- ")
             self.print_tree(self.root, 0)
-            print(f"-------- After adding suffix {self.string[:i+1]} -------- ")
+            print("\n\n\n\n\n")
 
     def add_to_tree(self, i):
         # set the end of the current phase to the current index
@@ -76,6 +78,8 @@ class SuffixTree(object):
                 next_node = self.active_node.edges[edge_char]
                 # get the length of the edge
                 length = next_node.edge_length(self.end)
+                print(f"Edge Length: {length}, Active Length: {self.active_length}")
+                print(next_node)
                 # if the active length is greater than the length of the edge, move to the next node
                 if self.active_length >= length:
                     self.active_edge += length
@@ -95,6 +99,7 @@ class SuffixTree(object):
 
                 # Rule 2: create a new internal node and add it to the active node
                 # create a new internal node
+                print(f"Active Node: {self.active_node}, Edge Char: {edge_char}")
                 split_node = SuffixTreeNode(next_node.start, next_node.start + self.active_length - 1)
                 self.active_node.edges[edge_char] = split_node
                 # create a new leaf node
@@ -123,6 +128,8 @@ class SuffixTree(object):
     def print_tree(self, node=None, depth=0):
         if not node:
             node = self.root
+        if depth == 0:
+            print(f"Tree Values: End {self.end}, Active Edge {self.active_edge}, Active Length {self.active_length}, Remainder {self.remainder}")
         for char, child in node.edges.items():
             edge_string= self.string[child.start:child.end+1 if child.end else None]
             print("  " * depth + f"{char}: ({edge_string})")
